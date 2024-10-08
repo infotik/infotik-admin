@@ -186,25 +186,25 @@ const page = ({params}) => {
         <h2 className='inline-block text-2xl text-white'>Verify Video</h2>
       </div>
 
-      <div className='px-20 grid grid-cols-3 h-[80%] relative'>
+      <div className='px-4 md:px-20 grid grid-cols-1 md:grid-cols-3 gap-4 h-[80%] relative'>
         <div className='h-full flex items-end relative'>
-          {/* {
-            post?.approved 
-            ? <button className='py-2 px-8 rounded-md border border-red-500 text-red-500 w-[70%] mb-20' onClick={deletePostHandler}>{deleteLoading ? "Loading" : "DELETE"}</button>
-            : <button className='py-2 px-8 rounded-md border border-red-500 text-red-500 w-[70%] mb-20' onClick={() => setDenyOpen(true)}>DENY</button>
-            
-            } */}
-          <button className='py-2 px-8 rounded-md border border-red-500 text-red-500 w-[70%] mb-20' onClick={deletePostHandler}>{deleteLoading ? "Loading" : "DELETE"}</button>
+          <button className='py-2 px-8 rounded-md border border-red-500 text-red-500 w-full md:w-[70%] mb-20'>
+            {deleteLoading ? "Loading" : "DELETE"}
+          </button>
         </div>
         <div className='h-full bg-primary relative'>
-          <video controls poster={post?.media[1]} src={post?.media[0]} className='object-contain h-[calc(100%-0px)] w-full'>
+          <video controls poster={post?.media[1]} src={post?.media[0]} className='object-contain h-full w-full'>
           </video>
         </div>
-        <div className='h-full flex flex-col pl-20 pt-10'>
+        <div className='h-full flex flex-col pl-4 md:pl-20 pt-10'>
           <div className='flex-1'>
             <div className='flex gap-2 items-center'>
               {
-                user?.photoURL ? <img src={user?.photoURL} alt='avatar' className='w-10 h-10 rounded-full'/> : <img src={`/default.png`} alt='avatar' className='w-10 h-10 rounded-full'/>
+                user?.photoURL ? (
+                  <img src={user?.photoURL} alt='avatar' className='w-10 h-10 rounded-full' />
+                ) : (
+                  <img src={`/default.png`} alt='avatar' className='w-10 h-10 rounded-full' />
+                )
               }
               <p className='text-white'>@{user?.username}</p>
             </div>
@@ -212,47 +212,42 @@ const page = ({params}) => {
             <div className='mt-16 relative flex flex-wrap gap-2 justify-center'>
               {
                 post && post?.hashtags.map(data => (
-                  <KeywordBox text={data}/>
+                  <KeywordBox key={data} text={data} />
                 ))
               }
               <button className='bg-none border-none outline-none absolute -right-2 -top-10' onClick={() => setKeywordOpen(true)}>
-                <img src='/Edit.png' className='object-contain'/>
+                <img src='/Edit.png' className='object-contain' />
               </button>
               {
-                post?.hashtags.length != 0 &&
+                post?.hashtags.length !== 0 &&
                 <button className='bg-none p-1 px-2 outline-none border border-red-500 rounded-md text-red-500 absolute -left-5 -top-10' onClick={() => keywordUpdate(true)}>
-                  
-                  {kloading ? 'Loading...' :'delete keyword'}
+                  {kloading ? 'Loading...' : 'Delete Keyword'}
                 </button>
               }
-              
             </div>
 
             <div className='mt-10 relative'>
-              <h3 className='text-secondary text-2xl mt-2'>{post?.newslink?.split("/")[2]?.slice(0,6)}</h3>
+              <h3 className='text-secondary text-2xl mt-2'>{post?.newslink?.split("/")[2]?.slice(0, 6)}</h3>
               <div className='border border-secondary flex relative rounded-md'>
-                <div className='flex-1 flex items-center  relative px-2'>
-                  <input type='text' className='text-white bg-primary w-full outline-none border-none' readOnly={true} value={post?.newslink}/>
+                <div className='flex-1 flex items-center relative px-2'>
+                  <input type='text' className='text-white bg-primary w-full outline-none border-none' readOnly value={post?.newslink} />
                 </div>
-                
                 <Link href={post?.newslink ?? '/'} className='h-full w-14 bg-secondary text-white flex justify-center py-4 rounded-r-md'>
-                  <img src='/V.png' className='object-contain'/>
+                  <img src='/V.png' className='object-contain' />
                 </Link>
               </div>
               <button className='bg-none border-none outline-none absolute -right-5 -top-0' onClick={() => setLinkOpen(true)}>
-                <img src='/Edit.png' className='object-contain'/>
+                <img src='/Edit.png' className='object-contain' />
               </button>
             </div>
 
-
             <div className='mt-10 relative'>
               <div className='flex relative rounded-md'>
-                <div className='flex-1 flex items-center  relative px-2'>
-                  <input type='text' className='text-white/90 bg-primary w-full outline-none border-none text-sm' readOnly={true} value={post?.description}/>
+                <div className='flex-1 flex items-center relative px-2'>
+                  <input type='text' className='text-white/90 bg-primary w-full outline-none border-none text-sm' readOnly value={post?.description} />
                 </div>
-                
                 <button className='h-full w-8 flex justify-center py-4' onClick={() => setDescOpen(true)}>
-                  <img src='/Edit.png' className='object-contain'/>
+                  <img src='/Edit.png' className='object-contain' />
                 </button>
               </div>
             </div>
@@ -260,70 +255,68 @@ const page = ({params}) => {
           <div className='flex justify-start'>
             {
               post?.approved 
-              ? <button className='py-2 px-8 rounded-md border border-secondary text-secondary w-[85%] mb-20' disabled={loading} onClick={handleApproved}>{loading ? 'Loading...' :'PUBLIC CHNAGE'}</button>
-              : <button className='py-2 px-8 rounded-md border border-secondary text-secondary w-[85%] mb-20' disabled={loading} onClick={handleApproved}>{loading ? 'Loading...' :'APPROVE'}</button>
+              ? <button className='py-2 px-8 rounded-md border border-secondary text-secondary w-full md:w-[85%] mb-20' disabled={loading} onClick={handleApproved}>
+                  {loading ? 'Loading...' : 'PUBLIC CHANGE'}
+                </button>
+              : <button className='py-2 px-8 rounded-md border border-secondary text-secondary w-full md:w-[85%] mb-20' disabled={loading} onClick={handleApproved}>
+                  {loading ? 'Loading...' : 'APPROVE'}
+                </button>
             }
           </div>
         </div>
       </div>
+
+      {/* Dialogs */}
       <Dialog open={denyOpen} onClose={() => setDenyOpen(false)}>
-       <div className='px-3 flex justify-center flex-col items-center'>
-          <h4 className='text-white text-center mb-4'>ARE YOU SURE UOU WANT TO DENY THIS VIDEO?</h4>
-          <img src={post?.media[1]} className='w-full h-[27rem]'/>
-          <button className='py-2 px-8 rounded-md border border-red-500 text-red-500 w-[100%] mb-5 mt-5' onClick={handleDeny}>{denyLoading ? "Loading..." : "DENY"}</button>
-          <button className='py-2 px-8 rounded-md border border-secondary text-secondary w-[50%] mb-5' onClick={() => setDenyOpen(false)}>Cancel</button>
+        <div className='px-3 flex justify-center flex-col items-center'>
+          <h4 className='text-white text-center mb-4'>ARE YOU SURE YOU WANT TO DENY THIS VIDEO?</h4>
+          <img src={post?.media[1]} className='w-full h-[27rem]' />
+          <button className='py-2 px-8 rounded-md border border-red-500 text-red-500 w-full mb-5 mt-5' onClick={handleDeny}>
+            {denyLoading ? "Loading..." : "DENY"}
+          </button>
+          <button className='py-2 px-8 rounded-md border border-secondary text-secondary w-1/2 mb-5' onClick={() => setDenyOpen(false)}>Cancel</button>
         </div>
       </Dialog>
+
       <Dialog open={linkOpen} onClose={() => setLinkOpen(false)}>
         <div className='px-1 flex justify-center flex-col items-center mt-5'>
-          <textarea placeholder='News Link' className='text-white bg-black w-full p-2 h-[10rem] outline-none' value={newslink} onChange={(e) => setNewsLink(e.target.value)}>
-
-          </textarea>
+          <textarea placeholder='News Link' className='text-white bg-black w-full p-2 h-[10rem] outline-none' value={newslink} onChange={(e) => setNewsLink(e.target.value)} />
         </div>
         <div className='flex items-center justify-center'>
-          <button className='py-2 px-8 rounded-md border border-secondary text-secondary w-[50%] my-5 mt-10 mx-auto' disabled={nloading} onClick={NewsLinkUpdate}>
-              {nloading ? 'Loading...' :'UPDATE'}
+          <button className='py-2 px-8 rounded-md border border-secondary text-secondary w-1/2 my-5 mt-10 mx-auto' disabled={nloading} onClick={NewsLinkUpdate}>
+            {nloading ? 'Loading...' : 'UPDATE'}
           </button>
         </div>
-        
       </Dialog>
+
       <Dialog open={descOpen} onClose={() => setDescOpen(false)}>
         <div className='px-1 flex justify-center flex-col items-center mt-5'>
-          <textarea placeholder='News Link' className='text-white bg-black w-full p-2 h-[10rem] outline-none' value={description} onChange={(e) => setDescription(e.target.value)}>
-
-          </textarea>
+          <textarea placeholder='Description' className='text-white bg-black w-full p-2 h-[10rem] outline-none' value={description} onChange={(e) => setDescription(e.target.value)} />
         </div>
         <div className='flex items-center justify-center'>
-          <button className='py-2 px-8 rounded-md border border-secondary text-secondary w-[50%] my-5 mt-10 mx-auto' disabled={dloading} onClick={DescriptionUpdate}>
-              {dloading ? 'Loading...' :'UPDATE'}
+          <button className='py-2 px-8 rounded-md border border-secondary text-secondary w-1/2 my-5 mt-10 mx-auto' disabled={dloading} onClick={DescriptionUpdate}>
+            {dloading ? 'Loading...' : 'UPDATE'}
           </button>
         </div>
-        
       </Dialog>
 
       <Dialog open={keywordOpen} onClose={() => setKeywordOpen(false)}>
-          <h4 className='text-center text-white mb-4'>Choose some of your favorite topics
-            <br/>
-            ({selectedyKeword.length}/5)
-          </h4>
+        <h4 className='text-center text-white mb-4'>Choose some of your favorite topics<br />({selectedyKeword.length}/5)</h4>
         <div className='mt-10 relative flex flex-wrap gap-2 justify-center'>
           {
             allKeyword.map(data => (
-              <KeywordBox text={data} selected={selectedyKeword.includes(data)} onClick={() => handleSelectkeyword(data)}/>
+              <KeywordBox key={data} text={data} selected={selectedyKeword.includes(data)} onClick={() => handleSelectkeyword(data)} />
             ))
           }
         </div>
         <div className='flex items-center justify-center gap-4'>
-          <button className='py-2 px-8 rounded-md border border-secondary text-secondary w-[50%] my-5 mt-10 mx-auto' disabled={kloading} onClick={() => keywordUpdate(false)}>
-            {kloading ? 'Loading...' :'UPDATE'}
+          <button className='py-2 px-8 rounded-md border border-secondary text-secondary w-1/2 my-5 mt-10 mx-auto' disabled={kloading} onClick={() => keywordUpdate(false)}>
+            {kloading ? 'Loading...' : 'UPDATE'}
           </button>
-          {/* <button className='py-2 px-8 rounded-md border border-secondary text-secondary w-[50%] my-5 mt-10 mx-auto' disabled={kloading} onClick={() => keywordUpdate(true)}>
-            {kloading ? 'Loading...' :'Clear'}
-          </button> */}
         </div>
       </Dialog>
     </section>
   )
 }
 
-export default page
+export default page;
